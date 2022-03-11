@@ -1,5 +1,6 @@
 #+TITLE: Datomish
 #+OPTIONS: \n:t
 
-Datomish is a set of common operations on datomic-like databases. \\
+Datomish provides a set of common operations on datomic-like databases. \\
+The generic operations allow us to work with such databases a layer up, not committing to any particular type. \\
 A specific implementation can be extended via ~extend-db-type~.
