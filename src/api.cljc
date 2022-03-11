@@ -35,16 +35,14 @@
 (defn extend-db-type
   "Implement the db type.
   Adapter is a map of each operations, as keywods,
-  to the actual functions.
-  Specifically:
+  to the actual functions, specifically:
   :pull, :datoms, :pull-many, :q, :transact
-  :entity, :listen, :unlisten, :schema, :with."
+  :entity, :listen, :unlisten, :schema, :with.
+
+  An operator can be made extensible via meta.
+  We give meta adapters first priority."
   [type adapter]
 
-  ;; Since we know the exact positons of conn or db,
-  ;; we could lookup an adapter function from meta.
-  ;; So an operator can be made extensible via meta.
-  ;; We give meta adapters first priority.
   (defmethod schema type [dbc]
     (or ((-> dbc meta (get `schema)) dbc)
         ((:schema adapter) dbc)))
