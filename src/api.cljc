@@ -1,7 +1,6 @@
 (ns datomish.api
-  "A generic operations for datomic-like database."
-  (:require [datascript.core :as ds]
-            [clojure.walk :refer [prewalk]]))
+  "Generic operations for datomic-like database."
+  (:require [datascript.core :as ds]))
 
 ;; ------------------------------------------------- ;;
 ;; Generic Operators
