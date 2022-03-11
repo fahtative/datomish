@@ -73,8 +73,8 @@
     ([conn key] ((:unlisten adapter) conn key)))
 
   ;; No 'extend for cljs.
-  ;; And 'extend-type expand immediately in clj,
-  ;; rather waiting for 'type' value.
+  ;; And 'extend-type expands immediately in clj,
+  ;; which complains about unknown 'type' symbol.
 
   #?(:cljs
      (extend-type type
