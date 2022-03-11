@@ -39,7 +39,7 @@
   :pull, :datoms, :pull-many, :q, :transact
   :entity, :listen, :unlisten, :schema, :with.
 
-  An operator can be made extensible via meta.
+  An operator can be made extensible via meta of specific db instance.
   We give meta adapters first priority."
   [type adapter]
 
