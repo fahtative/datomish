@@ -11,8 +11,8 @@
   (swap! conn
          (fn [db f args]
            (with-meta
-             (d/init-db
-              (or (d/datoms db :eavt) [])
+             (ds/init-db
+              (or (ds/datoms db :eavt) [])
               (apply f (:schema db) args))
              (meta db)))
          f
@@ -52,28 +52,28 @@
 (defn- check-schema-change
   [{:keys [db-before db-after tx-data]}]
   (let [get-eids (fn [db tx-data]
-                   (d/q '{:find [[?eid ...]]
-                          :in [$ [[?eid]]]
-                          :where [[?eid :db/ident]]}
-                        db
-                        tx-data))
+                   (ds/q '{:find [[?eid ...]]
+                           :in [$ [[?eid]]]
+                           :where [[?eid :db/ident]]}
+                         db
+                         tx-data))
         updating-eids (get-eids db-after tx-data)
         deleting-eids (into []
                             (remove (set updating-eids))
                             (get-eids db-before tx-data))
         schema-map (when (seq updating-eids)
                      (->> updating-eids
-                          (d/pull-many db-after schema-pattern)
+                          (ds/pull-many db-after schema-pattern)
                           (transduce (keep #(schema->schema-map
                                              %
                                              constrained-schema))
                                      merge)))
         schema-keys (when (seq deleting-eids)
-                      (d/q '{:find [[?attr ...]]
-                             :in [$ [?eid ...]]
-                             :where [[?eid :db/ident ?attr]]}
-                           db-before
-                           deleting-eids))]
+                      (ds/q '{:find [[?attr ...]]
+                              :in [$ [?eid ...]]
+                              :where [[?eid :db/ident ?attr]]}
+                            db-before
+                            deleting-eids))]
     {:schema-map schema-map
      :schema-keys schema-keys}))
 
@@ -138,9 +138,9 @@
                     (apply-delta-schema! conn tx-report)
                     (handler tx-report))]
      (update-schema-map! conn merge initial-schema)
-     (d/transact conn (non-existing-idents @conn initial-tx-data))
-     ;; (d/transact conn initial-tx-data)
-     (d/listen! conn ::schema callback)
+     (ds/transact conn (non-existing-idents @conn initial-tx-data))
+     ;; (ds/transact conn initial-tx-data)
+     (ds/listen! conn ::schema callback)
      conn
      ;; ::bootstrapped
      ))
@@ -152,6 +152,6 @@
 
 (defn unlisten-schema-change!
   [conn]
-  (d/unlisten! conn ::schema))
+  (ds/unlisten! conn ::schema))
 
 (def wrap-dynamic listen-on-schema-change!)
