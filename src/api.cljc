@@ -12,9 +12,12 @@
 (defmulti schema (fn [dbc] (type @dbc)))
 
 (defmulti q (fn [query db & rest] (type db)))
-;; where we fail to find the appropriate db-type for a query,
+;; Where we fail to find the appropriate db-type for a query,
 ;; we'll treat the 'db' as a list of triplets (i.e. datoms) and use
 ;; datascript's operator.
+;; Converting every datoms to lists is probably
+;; not the most efficient method, but it'll make sure datascript's q works
+;; (if datom of a particular db-type supports conversion to list).
 (defmethod q :default [query datoms & args]
   (apply ds/q (map #(apply list %) datoms)
          args))
