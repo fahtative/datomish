@@ -43,9 +43,9 @@
   [type adapter]
 
   ;; Since we know the exact positons of conn or db,
-  ;; we could lookup an adapter function first from meta.
-  ;; So an operator can be made extensible via meta if we
-  ;; give meta adapters first priority.
+  ;; we could lookup an adapter function from meta.
+  ;; So an operator can be made extensible via meta.
+  ;; We give meta adapters first priority.
   (defmethod schema type [dbc]
     (or ((-> dbc meta (get `schema)) dbc)
         ((:schema adapter) dbc)))
