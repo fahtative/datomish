@@ -4,12 +4,6 @@
             [clojure.walk :refer [prewalk]]))
 
 ;; ------------------------------------------------- ;;
-;; Utilities
-
-(defn contains-all? [m ks]
-  (every? #(contains? m %) ks))
-
-;; ------------------------------------------------- ;;
 ;; Generic Operators
 
 (defmulti transact (fn [dbc & rest] (type @dbc)))
