@@ -55,7 +55,7 @@
 
   (defmethod q type [& args]
     (apply
-     (or (-> args first meta (get `transact))
+     (or (-> args first meta (get `q))
          (:q adapter) args)
      args))
 
@@ -70,7 +70,10 @@
        ((:listen adapter) dbc key callback))))
 
   (defmethod unlisten type
-    ([conn key] ((:unlisten adapter) conn key)))
+    ([dbc key]
+     ((or (-> dbc meta (get `unlisten))
+          (:unlisten adapter))
+      dbc key)))
 
   ;; No 'extend for cljs.
   ;; And 'extend-type expands immediately in clj,
