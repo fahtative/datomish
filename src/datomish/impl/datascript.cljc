@@ -1,7 +1,8 @@
 (ns datomish.impl.datascript
   (:require [datomish.api :as d]
             [datascript.core :as ds]
-            [datomish.impl.datascript-wrap :as w]))
+            [datomish.impl.datascript-wrap :as w])
+  (:refer-clojure :exclude [filter]))
 
 (def wrap-dynamic w/wrap-dynamic)
 
