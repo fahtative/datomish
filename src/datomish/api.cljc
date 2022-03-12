@@ -40,12 +40,13 @@
   :entity, :listen, :unlisten, :schema, :with.
 
   An operator can be made extensible via meta of a specific db instance.
-  We give meta adapters first priority."
+  Meta adapters are given first priority."
   [type adapter]
 
   (defmethod schema type [dbc]
-    (or ((-> dbc meta (get `schema)) dbc)
-        ((:schema adapter) dbc)))
+    ((or (-> dbc meta (get `schema))
+         (:schema adapter))
+     dbc))
 
   (defmethod transact type [& args]
     (apply
@@ -56,18 +57,18 @@
   (defmethod q type [& args]
     (apply
      (or (-> args first meta (get `q))
-         (:q adapter) args)
+         (:q adapter))
      args))
 
   (defmethod listen type
     ([dbc callback]
-     (if-let [f (-> dbc meta (get `listen))]
-       (f dbc callback)
-       ((:listen adapter) dbc callback)))
+     ((or (-> dbc meta (get `listen))
+          (:listen adapter))
+      dbc callback))
     ([dbc key callback]
-     (if-let [f (-> dbc meta (get `listen))]
-       (f dbc key callback)
-       ((:listen adapter) dbc key callback))))
+     ((or (-> dbc meta (get `listen))
+          (:listen adapter))
+      dbc key callback)))
 
   (defmethod unlisten type
     ([dbc key]
@@ -83,54 +84,30 @@
      (extend-type type
        DB
        (pull [db pattern eid]
-         ((or (-> db meta (get `pull))
-              (:pull adapter))
-          db pattern eid))
+         ((:pull adapter) db pattern eid))
        (pull-many [db pattern eids]
-         ((or (-> db meta (get `pull-many))
-              (:pull-many adapter))
-          db pattern eids))
+         ((:pull-many adapter) db pattern eids))
        (entity [db eid]
-         ((or (-> db meta (get `entity))
-              (:entity adapter))
-          db eid))
+         ((:entity adapter) db eid))
        (entid [db eid]
-         ((or (-> db meta (get `entid))
-              (:entid adapter))
-          db eid))
+         ((:entid adapter) db eid))
        (datoms [db index]
-         ((or (-> db meta `datoms)
-              (:db adapter))
-          db index))
+         ((:datoms adapter) db index))
        (with [db tx-data]
-         ((or (-> db meta `with)
-              (:with adapter))
-          db tx-data)))
+         ((:with adapter) db tx-data)))
 
      :clj
      (extend type
        DB
        {:pull      (fn [db pattern eid]
-                     ((or (-> db meta (get `pull))
-                          (:pull adapter))
-                      db pattern eid))
+                     ((:pull adapter) db pattern eid))
         :pull-many (fn [db pattern eids]
-                     ((or (-> db meta (get `pull-many))
-                          (:pull-many adapter))
-                      db pattern eids))
+                     ((:pull-many adapter) db pattern eids))
         :entity    (fn [db eid]
-                     ((or (-> db meta (get `entity))
-                          (:entity adapter))
-                      db eid))
+                     ((:entity adapter) db eid))
         :entid     (fn [db eid]
-                     ((or (-> db meta (get `entid))
-                          (:entid adapter))
-                      db eid))
+                     ((:entid adapter) db eid))
         :datoms    (fn [db index]
-                     ((or (-> db meta (get `datoms))
-                          (:db adapter))
-                      db index))
+                     ((:datoms adapter) db index))
         :with      (fn [db tx-data]
-                     ((or (-> db meta (get `with))
-                          (:with adapter))
-                      db tx-data))})))
+                     ((:with adapter) db tx-data))})))
