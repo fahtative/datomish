@@ -1,4 +1,4 @@
-(ns datomish.impl.datascript-wraps
+(ns datomish.impl.datascript-wrap
   "Wrap a datascript database, allowing schema transactions/updates,
   as opposed to only creation-time schema which is the default.
 
