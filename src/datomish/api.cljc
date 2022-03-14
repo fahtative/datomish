@@ -5,7 +5,9 @@
 ;; ------------------------------------------------- ;;
 ;; Generic Operators
 
-(defmulti transact (fn [dbc & rest] (type @dbc)))
+(defmulti transact "Transact and immediately realize returning future."
+  (fn [dbc & rest] (type @dbc)))
+(defmulti transact! (fn [dbc & rest] (type @dbc)))
 (defmulti listen (fn [dbc & rest] (type @dbc)))
 (defmulti unlisten (fn [dbc & rest] (type @dbc)))
 (defmulti schema (fn [dbc] (type @dbc)))

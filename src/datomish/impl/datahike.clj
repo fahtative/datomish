@@ -12,7 +12,8 @@
   :datoms    dh/datoms
   :pull-many dh/pull-many
   :q         dh/q
-  :transact  dh/transact
+  :transact  (comp deref dh/transact)
+  :transact! dh/transact
   :entity    dh/entity
   :listen    dh/listen})
 

@@ -14,6 +14,7 @@
   :pull-many ds/pull-many
   :q         ds/q
   :transact  ds/transact
+  :transact! ds/transact!
   :entity    ds/entity
   :listen    ds/listen!
   :entid     ds/entid

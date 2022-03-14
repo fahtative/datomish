@@ -7,7 +7,8 @@
  {:pull      dl/pull
   :pull-many dl/pull-many
   :q         dl/q
-  :transact  dl/transact!
+  :transact  dl/transact
+  :transact! dl/transact!
   :entity    dl/entity
   :listen    dl/listen!
   :datoms    dl/datoms
