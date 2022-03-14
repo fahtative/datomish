@@ -56,6 +56,12 @@
          (:transact adapter))
      args))
 
+  (defmethod transact! type [& args]
+    (apply
+     (or (-> args first meta (get `transact))
+         (:transact! adapter))
+     args))
+
   (defmethod q type [& args]
     (apply
      (or (-> args first meta (get `q))
