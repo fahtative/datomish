@@ -5,7 +5,7 @@
 ;; ------------------------------------------------- ;;
 ;; Generic Operators
 
-(defmulti transact "Transact and immediately realize returning future."
+(defmulti transact "Return future, Datomic compatible."
   (fn [dbc & rest] (type @dbc)))
 (defmulti transact! (fn [dbc & rest] (type @dbc)))
 (defmulti listen (fn [dbc & rest] (type @dbc)))
